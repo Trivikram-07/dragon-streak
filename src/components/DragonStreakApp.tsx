@@ -387,7 +387,20 @@ const DragonStreakApp = () => {
 
       {showMiniWidget && <FloatingWidget emotion={emotion} progress={progress} pending={pendingTasks.length} />}
 
-      <GoalPrompt open={isPromptOpen} onClose={() => setIsPromptOpen(false)} onSubmit={() => { setIsPromptOpen(false); setAvatarMessage('Tomorrow has a plan now. The dragon is proud already.'); }} />
+      <GoalPrompt open={isPromptOpen} onClose={() => setIsPromptOpen(false)} onSubmit={(title, type, minutes) => {
+          if (!title.trim()) return;
+          const task: Task = {
+            id: `task-${Date.now()}`,
+            title: title.trim(),
+            type: type,
+            estimatedMinutes: minutes,
+            done: false,
+            createdAt: new Date().toISOString().slice(0, 10),
+          };
+          setTasks((current) => [task, ...current]);
+          setIsPromptOpen(false);
+          setAvatarMessage('Tomorrow has a plan now. The dragon is proud already.');
+        }} />
     </main>
   );
 };
@@ -569,7 +582,11 @@ function FloatingWidget({ emotion, progress, pending }: { emotion: ReturnType<ty
   );
 }
 
-function GoalPrompt({ open, onClose, onSubmit }: { open: boolean; onClose: () => void; onSubmit: () => void }) {
+function GoalPrompt({ open, onClose, onSubmit }: { open: boolean; onClose: () => void; onSubmit: (title: string, type: TaskType, minutes: number) => void }) {
+  const [newTaskTitle, setNewTaskTitle] = useState('');
+  const [newTaskType, setNewTaskType] = useState<TaskType>('focus');
+  const [newTaskMinutes, setNewTaskMinutes] = useState(25);
+  
   return (
     <Dialog open={open} onOpenChange={(value) => !value && onClose()}>
       <DialogContent className="max-w-md rounded-[2rem] border-orange-100 bg-white p-0 shadow-2xl">
@@ -577,14 +594,14 @@ function GoalPrompt({ open, onClose, onSubmit }: { open: boolean; onClose: () =>
           <div className="absolute -right-8 -top-10 h-28 w-28 rounded-full bg-white/40" />
           <div className="mx-auto grid size-20 place-items-center rounded-full bg-orange-500 text-4xl shadow-lg shadow-orange-500/25 animate-bounce-slow">🐉</div>
           <DialogHeader className="relative mt-5">
-            <DialogTitle className="text-2xl font-black tracking-tight">Tomorrow’s tiny dragon pact</DialogTitle>
+            <DialogTitle className="text-2xl font-black tracking-tight">Tomorrow's tiny dragon pact</DialogTitle>
             <DialogDescription className="mt-2 text-sm text-slate-500">Name one promise you will keep. Your dragon will show up at 8 PM to ask.</DialogDescription>
           </DialogHeader>
         </div>
-        <form onSubmit={(event) => { event.preventDefault(); onSubmit(); }} className="space-y-5 p-6">
+        <form onSubmit={(event) => { event.preventDefault(); onSubmit(newTaskTitle, newTaskType, newTaskMinutes); }} className="space-y-5 p-6">
           <div className="space-y-2">
             <Label htmlFor="goal" className="text-sm font-bold">What should I ask you tomorrow?</Label>
-            <Input id="goal" autoFocus placeholder="e.g. Finish one page of my notebook" className="h-12 rounded-xl border-orange-200 bg-orange-50 px-4 text-sm font-semibold" />
+            <Input id="goal" autoFocus placeholder="e.g. Finish one page of my notebook" className="h-12 rounded-xl border-orange-200 bg-orange-50 px-4 text-sm font-semibold" value={newTaskTitle} onChange={(e) => setNewTaskTitle(e.target.value)} />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
