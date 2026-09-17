@@ -405,7 +405,7 @@ const DragonStreakApp = () => {
   );
 };
 
-function HeroCard({ progress, streak, totalDone, emotion }: { progress: number; streak: number; totalDone: number; emotion: ReturnType<typeof emotionCopy>[Emotion] }) {
+function HeroCard({ progress, streak, totalDone, emotion }: { progress: number; streak: number; totalDone: number; emotion: typeof emotionCopy[Emotion] }) {
   return (
     <Card className="overflow-hidden border-orange-100 bg-white shadow-[0_22px_60px_rgba(121,66,22,0.12)]">
       <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-rose-500 to-violet-500 p-7 text-white sm:p-9">
