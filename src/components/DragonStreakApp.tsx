@@ -306,10 +306,10 @@ const DragonStreakApp = () => {
                 </TabsList>
                 <div className="mt-5">
                   {activeTab === 'today' ? (
-                    <TaskCarousel tasks={tasks} carouselIndex={carouselIndex} onSelect={selectPendingTask} onComplete={completeTask} />
-                  ) : (
-                    <HistoryPanel tasks={tasks} totalDone={totalDone} />
-                  )}
+                                      <TaskCarousel tasks={tasks} carouselIndex={carouselIndex} onSelect={selectPendingTask} onComplete={completeTask} />
+                                    ) : (
+                                      <HistoryPanel tasks={tasks} totalDone={totalDone} weekDays={weekDays} weekActivity={weekActivity} />
+                                    )}
                 </div>
               </Tabs>
             </CardContent>
@@ -501,7 +501,7 @@ function TaskCarousel({ tasks, carouselIndex, onSelect, onComplete }: { tasks: T
   );
 }
 
-function HistoryPanel({ tasks, totalDone }: { tasks: Task[]; totalDone: number }) {
+function HistoryPanel({ tasks, totalDone, weekDays, weekActivity }: { tasks: Task[]; totalDone: number; weekDays: string[]; weekActivity: boolean[] }) {
   const completed = tasks.filter((task) => task.done);
   return (
     <div className="space-y-4">
