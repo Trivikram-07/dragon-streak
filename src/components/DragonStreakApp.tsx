@@ -544,7 +544,7 @@ function HistoryPanel({ tasks, totalDone, weekDays, weekActivity }: { tasks: Tas
   );
 }
 
-function MascotCard({ emotion }: { emotion: ReturnType<typeof emotionCopy>[Emotion] }) {
+function MascotCard({ emotion }: { emotion: typeof emotionCopy[Emotion] }) {
   return (
     <Card className="overflow-hidden border-orange-100 bg-white shadow-[0_18px_50px_rgba(121,66,22,0.1)]">
       <div className={`relative h-52 overflow-hidden ${emotion.tone}`}>
@@ -572,7 +572,7 @@ function MascotCard({ emotion }: { emotion: ReturnType<typeof emotionCopy>[Emoti
   );
 }
 
-function FloatingWidget({ emotion, progress, pending }: { emotion: ReturnType<typeof emotionCopy>[Emotion]; progress: number; pending: number }) {
+function FloatingWidget({ emotion, progress, pending }: { emotion: typeof emotionCopy[Emotion]; progress: number; pending: number }) {
   return (
     <button onClick={() => window.dispatchEvent(new CustomEvent('dragonstreak:widget-click'))} className="fixed bottom-5 right-5 z-30 grid size-16 place-items-center rounded-full border-4 border-white bg-orange-500 text-2xl shadow-[0_14px_35px_rgba(249,115,22,0.4)] transition-transform hover:-translate-y-1 hover:scale-105 active:scale-95">
       <span className="animate-pulse">{emotion.expression}</span>
